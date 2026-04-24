@@ -77,7 +77,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
 
   const handleUpdate = async (id) => {
     try {
-      await axios.put(`http://localhost:3000/categorias/${id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}categorias/${id}`, {
         nombre: nuevoNombre,
       });
 

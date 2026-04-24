@@ -133,7 +133,7 @@ function MovimientosPage() {
     }
 
     // 🔥 1. Crear movimiento
-    await axios.post("http://localhost:3000/movimientos", {
+    await axios.post(`${import.meta.env.VITE_API_URL}/movimientos`, {
       productoId,
       tipo: form.tipo,
       cantidad,
@@ -142,7 +142,7 @@ function MovimientosPage() {
     });
 
     // 🔥 2. Actualizar stock en backend
-    await axios.put(`http://localhost:3000/productos/${productoId}`, {
+    await axios.put(`${import.meta.env.VITE_API_URL}/productos/${productoId}`, {
       stock: newStock,
     });
 

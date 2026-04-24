@@ -178,7 +178,7 @@ function ProductosPage({
     if (editingId === null) {
       // 🔥 CREAR
       const res = await axios.post(
-        "http://localhost:3000/productos",
+        `${import.meta.env.VITE_API_URL}/productos`,
         payload
       );
 
@@ -206,7 +206,7 @@ function ProductosPage({
     } else {
       // 🔥 EDITAR
       const res = await axios.put(
-        `http://localhost:3000/productos/${editingId}`,
+        `${import.meta.env.VITE_API_URL}/productos/${editingId}`,
         payload
       );
 
@@ -266,7 +266,7 @@ function ProductosPage({
   if (!ok) return;
 
   try {
-    await axios.delete(`http://localhost:3000/productos/${id}`);
+    await axios.delete(`${import.meta.env.VITE_API_URL}/productos/${id}`);
 
     showAlert("Producto eliminado correctamente.", "Eliminado");
 

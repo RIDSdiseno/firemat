@@ -120,7 +120,7 @@ function InventarioPage({
     }
 
     try {
-      await axios.post("http://localhost:3000/inventario/movimiento", {
+      await axios.post(`${import.meta.env.VITE_API_URL}inventario/movimiento`, {
         productoId: productIdNum,
         tipo: movement.type.toLowerCase(),
         cantidad: qty,
@@ -163,7 +163,7 @@ function InventarioPage({
   const handleSaveEditedProduct = async (updatedProduct) => {
     try {
       await axios.put(
-        `http://localhost:3000/productos/${updatedProduct.id}`,
+        `${import.meta.env.VITE_API_URL}/productos/${updatedProduct.id}`,
         updatedProduct
       );
 

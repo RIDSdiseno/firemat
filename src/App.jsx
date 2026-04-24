@@ -51,7 +51,7 @@ function App() {
 
     try {
       // 🔥 1. Cargar categorías desde backend
-      const res = await fetch("http://localhost:3000/categorias");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/categorias`);
       const data = await res.json();
       setCategories(data);
 
