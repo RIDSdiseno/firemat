@@ -203,7 +203,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
 
                   return (
                     <motion.tr
-                      key={`${cat}-${idx}`}
+                      key={`${cat.id}-${idx}`}
                       variants={rowVariants}
                       initial="hidden"
                       animate="visible"

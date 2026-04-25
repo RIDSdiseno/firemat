@@ -81,7 +81,7 @@ function ProductEditModal({ open, onClose, product, categories, onSave }) {
                 <option value="">Sin categorías</option>
               ) : (
                 categories.map((cat) => (
-                  <option key={cat} value={cat.nombre}>
+                  <option key={cat.id} value={cat.nombre}>
                     {cat.nombre}
                   </option>
                 ))
