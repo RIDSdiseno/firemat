@@ -77,7 +77,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
       );
     } else {
       // 🔥 EDITAR EN BACKEND
-      const categoria = categories[editingIndex];
+      const categoria = categories[editingIndex]?.nombre;
 
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/categorias/${categoria.id}`,
@@ -220,7 +220,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
                           className="border px-2 py-1 rounded text-sm"
                           />
                         ) : (
-                          cat
+                          cat.nombre
                           )}
                           </td>
                       
