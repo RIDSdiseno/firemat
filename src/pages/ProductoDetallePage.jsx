@@ -15,11 +15,11 @@ function ProductoDetallePage() {
     const obtenerDetalle = async () => {
         try {
         const resProducto = await axios.get(
-        `${import.meta.env.VITE_API_URL}/productos/${id}`
+        `${import.meta.env.VITE_API_URL}/api/productos/${id}`
         );
 
         const resMovimientos = await axios.get(
-        `${import.meta.env.VITE_API_URL}/movimientos`
+        `${import.meta.env.VITE_API_URL}/api/movimientos`
         );
 
         const movimientosFiltrados = resMovimientos.data

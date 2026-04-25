@@ -28,7 +28,7 @@ function ProductosPage({
 
   const obtenerProductos = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/productos`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`, {
         params: {
           search,
           categoria: categoryFilter,
@@ -178,7 +178,7 @@ function ProductosPage({
     if (editingId === null) {
       // 🔥 CREAR
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/productos`,
+        `${import.meta.env.VITE_API_URL}/api/productos`,
         payload
       );
 
@@ -206,7 +206,7 @@ function ProductosPage({
     } else {
       // 🔥 EDITAR
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/productos/${editingId}`,
+        `${import.meta.env.VITE_API_URL}/api/productos/${editingId}`,
         payload
       );
 
@@ -266,7 +266,7 @@ function ProductosPage({
   if (!ok) return;
 
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/productos/${id}`);
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/productos/${id}`);
 
     showAlert("Producto eliminado correctamente.", "Eliminado");
 

@@ -16,8 +16,8 @@ function DashboardPage() {
     const cargarDatos = async () => {
     try {
         const [resProductos, resMovimientos] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL}/productos`),
-        axios.get(`${import.meta.env.VITE_API_URL}/movimientos`),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/productos`),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/movimientos`),
         ]);
 
         setProductos(resProductos.data);

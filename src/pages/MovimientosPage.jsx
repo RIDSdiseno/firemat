@@ -53,7 +53,7 @@ function MovimientosPage() {
   // 🔹 obtener movimientos
   const obtenerMovimientos = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/movimientos`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/movimientos`);
 
       const data = res.data.map((m) => ({
   id: m.id,
@@ -89,7 +89,7 @@ function MovimientosPage() {
   // 🔹 obtener productos
   const obtenerProductos = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/productos`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`);
       setProductos(res.data);
     } catch (error) {
       console.error("Error al cargar productos:", error);
@@ -133,7 +133,7 @@ function MovimientosPage() {
     }
 
     // 🔥 1. Crear movimiento
-    await axios.post(`${import.meta.env.VITE_API_URL}/movimientos`, {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/movimientos`, {
       productoId,
       tipo: form.tipo,
       cantidad,
@@ -142,7 +142,7 @@ function MovimientosPage() {
     });
 
     // 🔥 2. Actualizar stock en backend
-    await axios.put(`${import.meta.env.VITE_API_URL}/productos/${productoId}`, {
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/productos/${productoId}`, {
       stock: newStock,
     });
 

@@ -51,7 +51,7 @@ function App() {
 
     try {
       // 🔥 1. Cargar categorías desde backend
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/categorias`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias`);
       const data = await res.json();
       setCategories(data);
 
@@ -81,7 +81,7 @@ useEffect(() => {
 
   const obtenerProductosInicial = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/productos`);
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`);
 
     const data = res.data.map((p) => ({
       id: p.id,

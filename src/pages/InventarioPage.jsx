@@ -36,7 +36,7 @@ function InventarioPage({
   // 🔥 CARGAR PRODUCTOS DESDE BACKEND
   const obtenerProductos = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/productos`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`);
 
       const productosAdaptados = res.data.map((p) => ({
         ...p,
@@ -120,7 +120,7 @@ function InventarioPage({
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}inventario/movimiento`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/inventario/movimiento`, {
         productoId: productIdNum,
         tipo: movement.type.toLowerCase(),
         cantidad: qty,
@@ -163,7 +163,7 @@ function InventarioPage({
   const handleSaveEditedProduct = async (updatedProduct) => {
     try {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/productos/${updatedProduct.id}`,
+        `${import.meta.env.VITE_API_URL}/api/productos/${updatedProduct.id}`,
         updatedProduct
       );
 
