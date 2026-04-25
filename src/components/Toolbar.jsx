@@ -29,8 +29,8 @@ function Toolbar({
       >
         <option value="">Todas las categorias</option>
         {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
+          <option key={cat} value={cat.nombre}>
+            {cat.nombre}
           </option>
         ))}
       </select>
