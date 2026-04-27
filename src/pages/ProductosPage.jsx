@@ -63,7 +63,7 @@ function ProductosPage({
     code: "",
     sku: "",
     name: "",
-    category: p.categoryId,
+    category: categories[0]?.nombre ?? "",
     stock: "",
     minStock: "",
     location: "",
