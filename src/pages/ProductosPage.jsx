@@ -48,8 +48,8 @@ function ProductosPage({
         minStock: Number(p.minStock) || 0,
         location: typeof p.ubicacion === "string" ? p.ubicacion : "",
         status: p.activo ? "Activo" : "Inactivo",
-        docRef: typeof p.descripcion === "string" ? p.descripcion : "",
-        imageUrl: typeof p.imagen === "string" ? p.imagen : "",
+        docRef: String(p.descripcion || ""),
+        imageUrl: String(p.imagen || ""),
         criticidad: p.criticidad || "Media",
       }));
       
