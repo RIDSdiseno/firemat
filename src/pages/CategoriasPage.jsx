@@ -41,8 +41,6 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
     resetForm();
   };
 
-  import axios from "axios";
-
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -124,29 +122,49 @@ const handleSubmit = async (e) => {
     }
   };
 
-  const handleDelete = (index) => {
-    const name = categories[index].nombre;
+  const handleDelete = async (index) => {
+  const categoria = categories[index];
 
-    if (!window.confirm(`¿Seguro que deseas eliminar la categoria "${name}"?`)) {
-      return;
-    }
+  if (!categoria) return;
 
-    const usedByProducts = products.some(
-      (p) => normalize(p.category) === normalize(name)
+  const name = categoria.nombre;
+
+  if (!window.confirm(`¿Seguro que deseas eliminar la categoria "${name}"?`)) {
+    return;
+  }
+
+  const usedByProducts = products.some(
+    (p) => normalize(p.category) === normalize(name)
+  );
+
+  if (usedByProducts) {
+    showAlert(
+      `No puedes eliminar la categoria "${name}" porque hay productos asociados a ella.\n\n` +
+      `Primero reasigna o elimina esos productos.`,
+      "Categoria en uso"
+    );
+    return;
+  }
+
+  try {
+    // 🔥 DELETE REAL
+    await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/categorias/${categoria.id}`
     );
 
-    if (usedByProducts) {
-      showAlert(
-        `No puedes eliminar la categoria "${name}" porque hay productos asociados a ella.\n\n` +
-          `Primero reasigna o elimina esos productos.`,
-        "Categoria en uso"
-      );
-      return;
-    }
+    showAlert(
+      `La categoria "${name}" ha sido eliminada.`,
+      "Categoria eliminada"
+    );
 
-    setCategories((prev) => prev.filter((_, idx) => idx !== index));
-    showAlert(`La categoria "${name}" ha sido eliminada.`, "Categoria eliminada");
-  };
+    // 🔥 RECARGAR DESDE BACKEND
+    await obtenerCategorias();
+
+  } catch (error) {
+    console.error(error);
+    showAlert("Error al eliminar categoria", "Error");
+  }
+};
 
   const rowVariants = {
     hidden: { opacity: 0, y: 6 },
