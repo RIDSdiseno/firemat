@@ -46,7 +46,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const nameClean = (categoryName || "").trim;
+  const nameClean = (categoryName || "").trim();
 
   // ✅ VALIDACIONES
   if (!nameClean) {

@@ -20,6 +20,8 @@ function ProductosPage({
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+
+  
   
 
   useEffect(() => {
