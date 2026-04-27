@@ -170,13 +170,13 @@ function ProductosPage({
     const payload = {
       nombre: form.name.trim(),
       descripcion: docRefClean,
-      categoriaId: form.category,
-      stock,
-      minStock,
+      categoria: form.category,
+      stock: Number(form.minStock || 0),
+      minStock: Number(form.minStock || 0),
       precio: 0,
       ubicacion: form.location.trim() || null,
       activo: form.status === "Activo",
-      imagen: form.imageUrl || null, // 👈 AGREGAR
+      imagen: form.imageUrl, // 
       criticidad: form.criticidad || "Media",
     };
 
