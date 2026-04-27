@@ -60,7 +60,7 @@ function ProductosPage({
     code: "",
     sku: "",
     name: "",
-    category: categories[0] ?? "",
+    category: categories[0]?.nombre ?? "",
     stock: "",
     minStock: "",
     location: "",
@@ -79,7 +79,7 @@ function ProductosPage({
       code: "",
       sku: "",
       name: "",
-      category: categories[0] ?? "",
+      category: categories[0]?.nombre ?? "",
       stock: "",
       minStock: "",
       location: "",
@@ -147,7 +147,7 @@ function ProductosPage({
     return;
   }
 
-  if (!form.category || form.category.trim() === "") {
+  if (typeof form.category !== "string" || form.category.trim() === "") {
   showAlert("Debes seleccionar una categoría", "Error");
   return;
 }
@@ -174,7 +174,7 @@ function ProductosPage({
     const payload = {
       nombre: form.name.trim(),
       descripcion: docRefClean,
-      categoria: "",
+      categoria: form.category,
       stock: Number(form.minStock || 0),
       minStock: Number(form.minStock || 0),
       precio: 0,
