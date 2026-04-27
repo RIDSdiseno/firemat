@@ -39,7 +39,7 @@ function ProductosPage({
         code: p.id,
         sku: "",
         name: p.nombre,
-        category: categories.find(c => c.id === p.categoria)?.nombre || "Sin categoría",
+        category: categories.find(c => c.id === p.categoriaId)?.nombre || "Sin categoría",
         stock: p.stock,
         minStock: p.minStock ?? 0,
         location: p.ubicacion || "",
@@ -152,7 +152,7 @@ function ProductosPage({
   return;
 }
   const categoriaObj = categories.find(
-  (c) => c.nombre === form.category
+  (c) => Number(c.id) === Number(p.categoria)
 );
 
 if (!categoriaObj) {
@@ -183,7 +183,7 @@ if (!categoriaObj) {
       nombre: form.name.trim(),
       descripcion: docRefClean,
       categoriaId: categoriaObj.id,
-      stock: 0,
+      stock: stock,
       minStock: Number(form.minStock || 0),
       precio: 0,
       ubicacion: form.location.trim() || null,

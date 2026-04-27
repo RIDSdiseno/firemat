@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import axios from "axios";
 
 // 🔧 Normalizador global
-const normalize = (str) =>
-  str.trim().toLowerCase().replace(/\s+/g, " ");
+const normalize = (str) => {
+  if (typeof str !== "string") return "";
+  return str.trim().toLowerCase().replace(/\s+/g, " ");
+};
 
 function CategoriasPage({ categories, setCategories, products, showAlert }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +46,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const nameClean = categoryName.trim();
+  const nameClean = (categoryName || "").trim;
 
   // ✅ VALIDACIONES
   if (!nameClean) {
@@ -134,8 +136,8 @@ const handleSubmit = async (e) => {
   }
 
   const usedByProducts = products.some(
-    (p) => normalize(p.category) === normalize(name)
-  );
+  (p) => normalize(p?.category) === normalize(name)
+);
 
   if (usedByProducts) {
     showAlert(
@@ -225,7 +227,7 @@ const handleSubmit = async (e) => {
                 categories.map((cat, idx) => {
                   // 🔥 CORRECCIÓN CLAVE AQUÍ
                   const count = products.filter(
-                    (p) => normalize(p.category) === normalize(cat.nombre)
+                    (p) => normalize(p?.category) === normalize(cat.nombre)
                   ).length;
 
                   return (
