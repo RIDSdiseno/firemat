@@ -151,6 +151,14 @@ function ProductosPage({
   showAlert("Debes seleccionar una categoría", "Error");
   return;
 }
+  const categoriaObj = categories.find(
+  (c) => c.nombre === form.category
+);
+
+if (!categoriaObj) {
+  showAlert("Categoría no válida", "Error");
+  return;
+}
 
   const docRefClean = form.docRef.trim();
 
@@ -174,7 +182,7 @@ function ProductosPage({
     const payload = {
       nombre: form.name.trim(),
       descripcion: docRefClean,
-      categoria: form.category,
+      categoriaId: categoriaObj.id,
       stock: Number(form.minStock || 0),
       minStock: Number(form.minStock || 0),
       precio: 0,
