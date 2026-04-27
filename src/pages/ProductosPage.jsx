@@ -20,8 +20,6 @@ function ProductosPage({
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-
-  
   
 
   useEffect(() => {
@@ -48,8 +46,8 @@ function ProductosPage({
         minStock: Number(p.minStock) || 0,
         location: typeof p.ubicacion === "string" ? p.ubicacion : "",
         status: p.activo ? "Activo" : "Inactivo",
-        docRef: String(p.descripcion || ""),
-        imageUrl: String(p.imagen || ""),
+        docRef: typeof p.descripcion === "string" ? p.descripcion : "",
+        imageUrl: typeof p.imagen === "string" ? p.imagen : "",
         criticidad: p.criticidad || "Media",
       }));
       
