@@ -23,10 +23,8 @@ function ProductosPage({
   
 
   useEffect(() => {
-  if (categories.length > 0) {
     obtenerProductos();
-  }
-}, [search, categoryFilter, categories]);
+  }, [search, categoryFilter]);
 
   const obtenerProductos = async () => {
     try {
@@ -41,7 +39,6 @@ function ProductosPage({
         code: p.id,
         sku: "",
         name: p.nombre,
-        categoryId: p.categoriaId,
         category: categories.find(c => c.id === p.categoriaId)?.nombre || "Sin categoría",
         stock: p.stock,
         minStock: p.minStock ?? 0,
