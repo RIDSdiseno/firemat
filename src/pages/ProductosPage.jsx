@@ -152,7 +152,7 @@ function ProductosPage({
   return;
 }
   const categoriaObj = categories.find(
-  (c) => Number(c.id) === Number(p.categoria)
+  (c) => c.nombre === form.category
 );
 
 if (!categoriaObj) {
