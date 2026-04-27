@@ -174,7 +174,7 @@ function ProductosPage({
     const payload = {
       nombre: form.name.trim(),
       descripcion: docRefClean,
-      categoria: form.category,
+      categoria: "",
       stock: Number(form.minStock || 0),
       minStock: Number(form.minStock || 0),
       precio: 0,
