@@ -40,14 +40,14 @@ function ProductosPage({
         id: p.id,
         code: p.id,
         sku: "",
-        name: p.nombre,
-        category: categories.find(c => c.id === p.categoriaId)?.nombre || "Sin categoría",
-        stock: p.stock,
-        minStock: p.minStock ?? 0,
-        location: p.ubicacion || "",
+        name: typeof p.nombre === "string" ? p.nombre : "",
+        category: categories.find(c => Number(c.id) === Number(p.categoriaId))?.nombre || "Sin categoría",
+        stock: Number(p.stock) || 0,
+        minStock: Number(p.minStock) || 0,
+        location: typeof p.ubicacion === "string" ? p.ubicacion : "",
         status: p.activo ? "Activo" : "Inactivo",
-        docRef: p.descripcion || "",
-        imageUrl: p.imagen || "",
+        docRef: typeof p.descripcion === "string" ? p.descripcion : "",
+        imageUrl: typeof p.imagen === "string" ? p.imagen : "",
         criticidad: p.criticidad || "Media",
       }));
       
@@ -162,7 +162,7 @@ if (!categoriaObj) {
   return;
 }
 
-  const docRefClean = form.docRef.trim();
+  const docRefClean = String(form.docRef || "").trim();
 
   if (!docRefClean) {
     showAlert(
