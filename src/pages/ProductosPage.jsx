@@ -23,8 +23,10 @@ function ProductosPage({
   
 
   useEffect(() => {
+  if (categories.length > 0) {
     obtenerProductos();
-  }, [search, categoryFilter]);
+  }
+}, [search, categoryFilter, categories]);
 
   const obtenerProductos = async () => {
     try {
