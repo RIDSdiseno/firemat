@@ -147,7 +147,7 @@ function ProductosPage({
     return;
   }
 
-  if (!form.category) {
+  if (!form.category || form.category.trim() === "") {
   showAlert("Debes seleccionar una categoría", "Error");
   return;
 }
@@ -163,7 +163,11 @@ function ProductosPage({
   }
 
   // ✅ FIX DEFINITIVO: SIEMPRE enviar número (o 0)
-  const stock = Number(form.stock || 0);
+  const stock = Number(form.stock);
+  if (isNaN(stock)) {
+    showAlert("Stock invalido", "Error");
+    return;
+  }
   const minStock = Number(form.minStock || 0);
 
   try {
@@ -179,6 +183,8 @@ function ProductosPage({
       imagen: form.imageUrl, // 
       criticidad: form.criticidad || "Media",
     };
+
+    console.log("PAYLOAD ENVIADO:", payload)
 
     if (editingId === null) {
       // 🔥 CREAR
