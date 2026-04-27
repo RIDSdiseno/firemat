@@ -41,13 +41,21 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
     resetForm();
   };
 
-  const handleSubmit = async (e) => {
+  import axios from "axios";
+
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   const nameClean = categoryName.trim();
 
+  // ✅ VALIDACIONES
   if (!nameClean) {
     showAlert("El nombre de la categoria es obligatorio.", "Datos incompletos");
+    return;
+  }
+
+  if (nameClean.length < 2) {
+    showAlert("La categoria debe tener al menos 2 caracteres.", "Error");
     return;
   }
 
@@ -66,7 +74,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
 
   try {
     if (editingIndex === null) {
-      // 🔥 CREAR EN BACKEND
+      // 🔥 CREAR
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/categorias`,
         { nombre: nameClean }
@@ -77,8 +85,8 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
         "Categoria creada"
       );
     } else {
-      // 🔥 EDITAR EN BACKEND
-      const categoria = categories[editingIndex]?.nombre;
+      // 🔥 EDITAR
+      const categoria = categories[editingIndex]; // 👈 OBJETO COMPLETO
 
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/categorias/${categoria.id}`,
@@ -86,12 +94,12 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
       );
 
       showAlert(
-        `Categoria actualizada correctamente.`,
+        "Categoria actualizada correctamente.",
         "Categoria actualizada"
       );
     }
 
-    // 🔥 RECARGAR DESDE BD (CLAVE)
+    // 🔥 RECARGAR
     await obtenerCategorias();
 
     closeModal();
