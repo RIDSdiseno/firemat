@@ -227,7 +227,7 @@ const handleSubmit = async (e) => {
                 categories.map((cat, idx) => {
                   // 🔥 CORRECCIÓN CLAVE AQUÍ
                   const count = products.filter(
-                    (p) => normalize(p?.category) === normalize(cat.nombre)
+                    (p) => Number(p.categoryId) === Number(cat.id)
                   ).length;
 
                   return (
