@@ -136,7 +136,7 @@ const handleSubmit = async (e) => {
   }
 
   const usedByProducts = products.some(
-  (p) => normalize(p?.category) === normalize(name)
+  (p) => normalize(String(p.category)) === normalize(name)
 );
 
   if (usedByProducts) {
@@ -227,7 +227,7 @@ const handleSubmit = async (e) => {
                 categories.map((cat, idx) => {
                   // 🔥 CORRECCIÓN CLAVE AQUÍ
                   const count = products.filter(
-                    (p) => Number(p.categoryId) === Number(cat.id)
+                    (p) => normalize(String(p.category)) === normalize(cat.nombre)
                   ).length;
 
                   return (
