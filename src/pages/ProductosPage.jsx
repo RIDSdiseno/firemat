@@ -174,10 +174,10 @@ function ProductosPage({
       stock,
       minStock,
       precio: 0,
-      ubicacion: form.location.trim(),
+      ubicacion: form.location.trim() || null,
       activo: form.status === "Activo",
-      imagen: form.imageUrl, // 👈 AGREGAR
-      criticidad: form.criticidad || "media",
+      imagen: form.imageUrl || null, // 👈 AGREGAR
+      criticidad: form.criticidad || "Media",
     };
 
     if (editingId === null) {
