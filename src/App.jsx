@@ -48,28 +48,38 @@ function App() {
   useEffect(() => {
   const init = async () => {
     const savedUser = sessionStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    // 🔴 1. Si NO hay token → no llamar backend
+    if (!token) {
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+      }
+
+      setLoading(false);
+      return;
+    }
 
     try {
-      // 🔥 1. Cargar categorías desde backend
-      const token = localStorage.getItem("token");
+      // 🔥 2. Cargar categorías con token válido
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias`, {
         headers: {
-          authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
+
       const data = await res.json();
 
       if (!res.ok) {
-        console.error(data);
-        return;
+        console.error("Error backend:", data);
+      } else {
+        setCategories(data);
       }
-      setCategories(data);
-
-      // 🔥 2. (si tienes función para productos, debería ir aquí también)
-      // await obtenerProductosInicial();
 
     } catch (error) {
-      console.error("Error cargando datos iniciales:", error);
+      console.error("Error cargando categorías:", error);
     }
 
     // 🔐 3. Restaurar sesión
@@ -91,7 +101,14 @@ useEffect(() => {
 
   const obtenerProductosInicial = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`);
+    const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/productos`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
 
     const data = res.data.map((p) => ({
       id: p.id,
