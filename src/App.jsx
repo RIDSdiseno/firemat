@@ -132,32 +132,31 @@ useEffect(() => {
   };
 
   // 🔐 LOGIN
-  const handleLogin = (form, callback) => {
-    const { email, password } = form;
+  const handleLogin = async (form, callback) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
 
-    if (password !== "123456") {
-      callback?.(false, "Correo o contrasena incorrectos.");
+    const data = await res.json();
+
+    if (!res.ok) {
+      callback?.(false, data.error || "Correo o contraseña incorrectos");
       return;
     }
 
-    let role = null;
-    let name = "";
+    // 🔥 GUARDAR TOKEN (CLAVE)
+    localStorage.setItem("token", data.token);
 
-    if (email === "admin@firemat.cl") {
-      role = "Dueno";
-      name = "Dueno Firemat";
-    } else if (email === "ejecutivo@firemat.cl") {
-      role = "Ejecutivo";
-      name = "Ejecutivo Comercial";
-    } else if (email === "gerente@firemat.cl") {
-      role = "Gerente";
-      name = "Gerente de Operaciones";
-    } else {
-      callback?.(false, "Correo o contrasena incorrectos.");
-      return;
-    }
-
-    const user = { email, name, role };
+    // 🔥 usuario (básico por ahora)
+    const user = {
+      email: form.email,
+      role: data.role || "user" // si tu backend manda role, mejor
+    };
 
     sessionStorage.setItem("user", JSON.stringify(user));
 
@@ -165,7 +164,12 @@ useEffect(() => {
     setCurrentUser(user);
 
     callback?.(true);
-  };
+
+  } catch (error) {
+    console.error(error);
+    callback?.(false, "Error de conexión");
+  }
+};
 
   // 🔐 LOGOUT
   const handleLogout = () => {
