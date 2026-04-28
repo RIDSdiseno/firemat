@@ -1,7 +1,7 @@
 // src/pages/ProductosPage.jsx
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Axios } from "../api/axios.js";
+import  axios  from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 function ProductosPage({
