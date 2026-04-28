@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "./api/axios";
 import {
   BrowserRouter as Router,
   Routes,
@@ -101,14 +101,7 @@ useEffect(() => {
 
   const obtenerProductosInicial = async () => {
   try {
-    const res = await axios.get(
-  `${import.meta.env.VITE_API_URL}/api/productos`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }
-);
+    const res = await axios.get("/api/productos");
 
     const data = res.data.map((p) => ({
       id: p.id,
