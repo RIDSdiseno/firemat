@@ -19,7 +19,7 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
   try {
     // Ya no necesitas la URL completa ni los headers manualmente
     const res = await axios.get("/api/categorias");
-    setCategories(res.data);
+    setCategories(Array.isArray(res.data) ? res.data : []);
   } catch (error) {
     console.error("Error al obtener categorías:", error);
     // Si hay error (como el 401), reseteamos a array vacío 
@@ -81,10 +81,9 @@ const handleSubmit = async (e) => {
   try {
     if (editingIndex === null) {
       // 🔥 CREAR
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/categorias`,
-        { nombre: nameClean }
-      );
+      await axios.post("/api/categorias", {
+      nombre: nameClean,
+});
 
       showAlert(
         `Categoria "${nameClean}" creada correctamente.`,
@@ -94,10 +93,9 @@ const handleSubmit = async (e) => {
       // 🔥 EDITAR
       const categoria = categories[editingIndex]; // 👈 OBJETO COMPLETO
 
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/categorias/${categoria.id}`,
-        { nombre: nameClean }
-      );
+      await axios.put(`/api/categorias/${categoria.id}`, {
+  nombre: nameClean,
+});
 
       showAlert(
         "Categoria actualizada correctamente.",
@@ -117,9 +115,9 @@ const handleSubmit = async (e) => {
 
   const handleUpdate = async (id) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/api/categorias/${id}`, {
-        nombre: nuevoNombre,
-      });
+      await axios.put(`/api/categorias/${id}`, {
+  nombre: nuevoNombre,
+});
 
       setEditingIndex(null);
       setNuevoNombre("");
@@ -156,9 +154,7 @@ const handleSubmit = async (e) => {
 
   try {
     // 🔥 DELETE REAL
-    await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/categorias/${categoria.id}`
-    );
+    await axios.delete(`/api/categorias/${categoria.id}`);
 
     showAlert(
       `La categoria "${name}" ha sido eliminada.`,
