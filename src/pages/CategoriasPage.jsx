@@ -1,7 +1,7 @@
 // src/pages/CategoriasPage.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
-import axios from "axios";
+import axios from "../api/axios.JS";
 
 // 🔧 Normalizador global
 const normalize = (str) => {
@@ -16,10 +16,16 @@ function CategoriasPage({ categories, setCategories, products, showAlert }) {
   const [categoryName, setCategoryName] = useState("");
 
   const obtenerCategorias = async () => {
-  const res = await axios.get(
-    `${import.meta.env.VITE_API_URL}/api/categorias`
-  );
-  setCategories(res.data);
+  try {
+    // Ya no necesitas la URL completa ni los headers manualmente
+    const res = await axios.get("/api/categorias");
+    setCategories(res.data);
+  } catch (error) {
+    console.error("Error al obtener categorías:", error);
+    // Si hay error (como el 401), reseteamos a array vacío 
+    // para que el r.map del error no rompa la pantalla.
+    setCategories([]); 
+  }
 };
 
   const resetForm = () => {

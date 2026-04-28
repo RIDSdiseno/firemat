@@ -1,6 +1,6 @@
 // src/pages/DashboardPage.jsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios.js";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import MovementsChart from "../components/MovementsCharts";
@@ -14,18 +14,30 @@ function DashboardPage() {
 
   // 🔥 CARGAR DATOS
     const cargarDatos = async () => {
-    try {
-        const [resProductos, resMovimientos] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL}/api/productos`),
-        axios.get(`${import.meta.env.VITE_API_URL}/api/movimientos`),
-        ]);
+  try {
+    // 1. Usamos rutas cortas. El token se inyecta solo gracias al interceptor.
+    const [resProductos, resMovimientos] = await Promise.all([
+      axios.get("/api/productos"),
+      axios.get("/api/movimientos"),
+    ]);
 
-        setProductos(resProductos.data);
-        setMovimientos(resMovimientos.data);
-    } catch (error) {
-        console.error("Error cargando dashboard:", error);
+    // 2. Verificamos que los datos sean arrays antes de guardarlos
+    setProductos(Array.isArray(resProductos.data) ? resProductos.data : []);
+    setMovimientos(Array.isArray(resMovimientos.data) ? resMovimientos.data : []);
+
+  } catch (error) {
+    console.error("Error cargando dashboard:", error);
+    
+    // 3. Si hay error (401 o caída del server), limpiamos los estados
+    // Esto evita que los .map() del render exploten
+    setProductos([]);
+    setMovimientos([]);
+
+    if (error.response?.status === 401) {
+      showAlert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "Sesión Expirada");
     }
-    };
+  }
+};
 
     useEffect(() => {
         cargarDatos();

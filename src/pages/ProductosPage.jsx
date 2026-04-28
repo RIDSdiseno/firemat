@@ -1,7 +1,7 @@
 // src/pages/ProductosPage.jsx
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { Axios } from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 function ProductosPage({
@@ -31,34 +31,46 @@ function ProductosPage({
 }, [search, categoryFilter, categories]);
 
   const obtenerProductos = async () => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos`, {
-        params: {
-          search,
-          categoria: categoryFilter,
-        },
-      });
-      const data = res.data.map((p) => ({
-        id: p.id,
-        code: p.id,
-        sku: "",
-        name: typeof p.nombre === "string" ? p.nombre : "",
-        category: categories.find(c => Number(c.id) === Number(p.categoriaId))?.nombre || "Sin categoría",
-        stock: Number(p.stock) || 0,
-        minStock: Number(p.minStock) || 0,
-        location: typeof p.ubicacion === "string" ? p.ubicacion : "",
-        status: p.activo ? "Activo" : "Inactivo",
-        docRef: typeof p.descripcion === "string" ? p.descripcion : "",
-        imageUrl: typeof p.imagen === "string" ? p.imagen : "",
-        criticidad: p.criticidad || "Media",
-      }));
-      
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
-      showAlert("Error al cargar productos", "Error");
-    }
-  };
+  try {
+    // 1. Usamos el axios personalizado (que ya tiene el token y la URL base)
+    // Ya no necesitas `${import.meta.env.VITE_API_URL}`
+    const res = await axios.get("/api/productos", {
+      params: {
+        search,
+        categoria: categoryFilter,
+      },
+    });
+
+    // 2. Verificamos que res.data sea un array antes de mapear
+    // Esto es el "seguro de vida" para que no explote el .map()
+    const rawData = Array.isArray(res.data) ? res.data : [];
+
+    const data = rawData.map((p) => ({
+      id: p.id,
+      code: p.id,
+      sku: "",
+      name: typeof p.nombre === "string" ? p.nombre : "",
+      category: categories.find(c => Number(c.id) === Number(p.categoriaId))?.nombre || "Sin categoría",
+      stock: Number(p.stock) || 0,
+      minStock: Number(p.minStock) || 0,
+      location: typeof p.ubicacion === "string" ? p.ubicacion : "",
+      status: p.activo ? "Activo" : "Inactivo",
+      docRef: typeof p.descripcion === "string" ? p.descripcion : "",
+      imageUrl: typeof p.imagen === "string" ? p.imagen : "",
+      criticidad: p.criticidad || "Media",
+    }));
+    
+    setProducts(data);
+  } catch (error) {
+    console.error(error);
+    // 3. Si el error es 401, podrías personalizar el mensaje si quieres
+    showAlert("Error al cargar productos. Verifique su sesión.", "Error");
+    
+    // 4. IMPORTANTE: Seteamos productos como array vacío si falla
+    // Así el resto de tu interfaz no se rompe
+    setProducts([]);
+  }
+};
 
   const [form, setForm] = useState({
     code: "",
@@ -199,47 +211,43 @@ if (!categoriaObj) {
     console.log("PAYLOAD ENVIADO:", payload)
 
     if (editingId === null) {
-      // 🔥 CREAR
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/productos`,
-        payload
-      );
+  // 🔥 CREAR
+  // 1. Ruta relativa y limpia (el token ya viaja gracias al interceptor)
+  const res = await axios.post("/api/productos", payload);
 
-      const newProduct = res.data;
+  const newProduct = res.data;
 
-      if (typeof addMovement === "function") {
-        const now = new Date();
-        const fechaISO = now.toISOString().slice(0, 10);
+  if (typeof addMovement === "function") {
+    const now = new Date();
+    const fechaISO = now.toISOString().slice(0, 10);
 
-        addMovement({
-          id: Date.now(),
-          fecha: fechaISO,
-          productoId: newProduct.id,
-          producto: newProduct.nombre,
-          tipo: "Alta de producto",
-          cantidad: stock,
-          stockAnterior: 0,
-          stockNuevo: stock,
-          motivo: "Creacion de nuevo producto",
-          documento: docRefClean,
-        });
-      }
+    addMovement({
+      id: Date.now(),
+      fecha: fechaISO,
+      productoId: newProduct.id,
+      producto: newProduct.nombre,
+      tipo: "Alta de producto",
+      cantidad: stock,
+      stockAnterior: 0,
+      stockNuevo: stock,
+      motivo: "Creacion de nuevo producto",
+      documento: docRefClean,
+    });
+  }
 
-      showAlert("Producto creado correctamente.", "Producto creado");
-    } else {
-      // 🔥 EDITAR
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/productos/${editingId}`,
-        payload
-      );
+  showAlert("Producto creado correctamente.", "Producto creado");
+}else {
+  // 🔥 EDITAR
+  // 1. Usamos ruta relativa y el token se envía automáticamente
+  const res = await axios.put(`/api/productos/${editingId}`, payload);
 
-      console.log("Producto actualizado", res.data);
+  console.log("Producto actualizado", res.data);
 
-      showAlert(
-        "Producto actualizado correctamente.",
-        "Producto actualizado"
-      );
-    }
+  showAlert(
+    "Producto actualizado correctamente.",
+    "Producto actualizado"
+  );
+}
 
     closeModal();
     await obtenerProductos();
@@ -285,20 +293,26 @@ if (!categoriaObj) {
     return;
   }
 
-  const ok = window.confirm("Seguro que quieres eliminar este producto?");
+  const ok = window.confirm("¿Seguro que quieres eliminar este producto?");
   if (!ok) return;
 
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/productos/${id}`);
+    // ✅ Usamos la ruta relativa. El token se envía solo.
+    await axios.delete(`/api/productos/${id}`);
 
     showAlert("Producto eliminado correctamente.", "Eliminado");
 
-    // 🔄 refrescar lista desde backend
+    // 🔄 Refrescar lista desde backend (esta función ya la corregimos antes)
     await obtenerProductos();
 
   } catch (error) {
     console.error(error);
-    showAlert("Error al eliminar producto", "Error");
+    // Si el error es 403 o 401, el backend está haciendo su trabajo
+    const mensaje = error.response?.status === 403 
+      ? "No tienes permisos de administrador para esta acción." 
+      : "Error al eliminar producto";
+      
+    showAlert(mensaje, "Error");
   }
 };
 const filteredProducts = products;
