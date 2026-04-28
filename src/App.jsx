@@ -51,8 +51,18 @@ function App() {
 
     try {
       // 🔥 1. Cargar categorías desde backend
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias`);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categorias`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
       const data = await res.json();
+
+      if (!res.ok) {
+        console.error(data);
+        return;
+      }
       setCategories(data);
 
       // 🔥 2. (si tienes función para productos, debería ir aquí también)
