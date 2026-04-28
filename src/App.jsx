@@ -164,8 +164,9 @@ useEffect(() => {
 
     // 🔥 usuario (básico por ahora)
     const user = {
-      email: form.email,
-      role: data.role || "user" // si tu backend manda role, mejor
+      id: data.user.id,
+      email: data.user.email,
+      role: data.user.role // si tu backend manda role, mejor
     };
 
     sessionStorage.setItem("user", JSON.stringify(user));
