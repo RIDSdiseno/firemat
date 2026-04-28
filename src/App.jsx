@@ -161,13 +161,15 @@ useEffect(() => {
 
     // 🔥 GUARDAR TOKEN (CLAVE)
     localStorage.setItem("token", data.token);
+    const role = data.user?.role || data.role;
 
     // 🔥 usuario (básico por ahora)
     const user = {
       id: data.user.id,
       email: data.user.email,
-      role: data.user.role // si tu backend manda role, mejor
+      role
     };
+    console.log("LOGIN RESPONSE:", data);
 
     sessionStorage.setItem("user", JSON.stringify(user));
 
