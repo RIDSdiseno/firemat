@@ -1,7 +1,7 @@
 // src/pages/CategoriasPage.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
-import axios from "../api/axios.JS";
+import axios from "../api/axios.js";
 
 // 🔧 Normalizador global
 const normalize = (str) => {
