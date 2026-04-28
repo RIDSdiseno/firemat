@@ -165,8 +165,8 @@ useEffect(() => {
 
     // 🔥 usuario (básico por ahora)
     const user = {
-      id: data.user.id,
-      email: data.user.email,
+      id: data.user?.id,
+      email: data.user?.email || form.email,
       role
     };
     console.log("LOGIN RESPONSE:", data);
