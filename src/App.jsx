@@ -96,8 +96,10 @@ function App() {
   init();
 }, []);
 useEffect(() => {
-  obtenerProductosInicial();
-}, []); 
+  if (isAuthenticated) {
+    obtenerProductosInicial();
+  }
+}, [isAuthenticated]);
 
   const obtenerProductosInicial = async () => {
   try {
