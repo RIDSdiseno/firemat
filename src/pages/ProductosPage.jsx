@@ -62,6 +62,10 @@ function ProductosPage({
     
     setProducts(data);
   } catch (error) {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    }
     console.error(error);
     // 3. Si el error es 401, podrías personalizar el mensaje si quieres
     showAlert("Error al cargar productos. Verifique su sesión.", "Error");
@@ -315,7 +319,33 @@ if (!categoriaObj) {
     showAlert(mensaje, "Error");
   }
 };
-const filteredProducts = products;
+const reservarProducto = async (id) => {
+  try {
+    await axios.post(`/api/productos/${id}/reservar`, {
+      cantidad: 1,
+    });
+
+    showAlert("Producto reservado correctamente", "OK");
+    await obtenerProductos();
+
+  } catch (error) {
+    console.error(error);
+    showAlert("Error al reservar producto", "Error");
+  }
+};
+
+const filteredProducts = products.filter((p) => {
+  const matchSearch =
+    p.name.toLowerCase().includes(search.toLowerCase());
+
+  const matchCategory =
+    !categoryFilter || p.category === categoryFilter;
+
+  const matchStatus =
+    !statusFilter || p.status === statusFilter;
+
+  return matchSearch && matchCategory && matchStatus;
+});
 
 const rowVariants = {
   hidden: { opacity: 0, y: 6 },
@@ -482,6 +512,7 @@ const rowVariants = {
   </span>
 </td>
 
+
 {/* 🔥 DOCUMENTO */}
 <td className="px-3 py-2">
   {p.docRef ? (
@@ -502,6 +533,13 @@ const rowVariants = {
       >
         Editar
       </button>
+      <button
+      type="button"
+      onClick={() => reservarProducto(p.id)}
+      className="px-2.5 py-1 rounded-md text-xs font-semibold bg-yellow-500 hover:bg-yellow-600 text-white"
+      >
+        Reservar
+        </button>
       <button
         type="button"
         onClick={() => handleDeleteClick(p.id)}
