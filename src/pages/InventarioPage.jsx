@@ -1,6 +1,6 @@
 // src/pages/InventarioPage.jsx
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 
 import SummaryCards from "../components/SummaryCards";
 import InventoryTable from "../components/InventoryTable";
