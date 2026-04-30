@@ -124,29 +124,67 @@ function MovimientosPage() {
 
     let newStock = producto.stock;
 
-    if (form.tipo === "entrada") {
-      newStock = producto.stock + cantidad;
-    } else if (form.tipo === "salida") {
-      newStock = Math.max(0, producto.stock - cantidad);
-    } else if (form.tipo === "ajuste") {
-      newStock = cantidad;
+    // 🔵 SISTEMA NUEVO (backend controla todo)
+    if (form.tipo === "reserva") {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/reservar`,
+        {
+          cantidad,
+          motivo: form.motivo,
+          documento: form.documento,
+        }
+      );
     }
 
-    // 🔥 1. Crear movimiento
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/movimientos`, {
-      productoId,
-      tipo: form.tipo,
-      cantidad,
-      motivo: form.motivo,
-      documento: form.documento,
-    });
+    else if (form.tipo === "salida") {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/confirmar-salida`,
+        {
+          cantidad,
+          motivo: form.motivo,
+          documento: form.documento,
+        }
+      );
+    }
 
-    // 🔥 2. Actualizar stock en backend
-    await axios.put(`${import.meta.env.VITE_API_URL}/api/productos/${productoId}`, {
-      stock: newStock,
-    });
+    else if (form.tipo === "cancelacion") {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/cancelar-reserva`,
+        {
+          cantidad,
+          motivo: form.motivo,
+          documento: form.documento,
+        }
+      );
+    }
 
-    // 🔥 reset form
+    // 🟡 SISTEMA VIEJO (entrada / ajuste)
+    else {
+      if (form.tipo === "entrada") {
+        newStock = producto.stock + cantidad;
+      } else if (form.tipo === "ajuste") {
+        newStock = cantidad;
+      }
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/movimientos`,
+        {
+          productoId,
+          tipo: form.tipo,
+          cantidad,
+          motivo: form.motivo,
+          documento: form.documento,
+        }
+      );
+
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}`,
+        {
+          stock: newStock,
+        }
+      );
+    }
+
     setIsModalOpen(false);
 
     setForm({
@@ -157,7 +195,6 @@ function MovimientosPage() {
       documento: "",
     });
 
-    // 🔥 recargar todo
     await obtenerMovimientos();
     await obtenerProductos();
 
