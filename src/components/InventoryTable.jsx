@@ -16,7 +16,7 @@ function InventoryTable({
     if (!term) return products;
 
     return products.filter((p) =>
-      [p.codigo, p.sku, p.nombre, p.categoria, p.ubicacion]
+      [p.code, p.sku, p.nombre, p.categoria, p.ubicacion]
         .filter(Boolean)
         .some((value) =>
           String(value).toLowerCase().includes(term)
@@ -143,12 +143,12 @@ function InventoryTable({
 
                     {/* CODIGO */}
                     <td className="px-3 py-2 font-semibold text-neutral-900">
-                      {p.codigo || p.id}
+                      {p.code || `P-${p.id}`}
                     </td>
 
                     {/* SKU */}
                     <td className="px-3 py-2 text-neutral-700">
-                      {p.sku || "-"}
+                      {p.sku || `SKU-${p.id}`}
                     </td>
 
                     {/* NOMBRE */}
