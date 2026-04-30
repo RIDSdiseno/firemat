@@ -42,18 +42,22 @@ function ReportPanel({ products = [], movements = [], categories = [], onNotify 
           "Motivo",
           "Documento",
         ],
-        rows: movements.map((m) => ({
-          Fecha: m.createdAt
-          ? new Date(m.createdAt).toLocaleDateString()
-          : "",
-          Producto: m.producto?.nombre || "N/D",
-          Tipo: m.tipo,
-          Cantidad: m.cantidad,
-          "Stock antes": m.stockAnterior,
-          "Stock despues": m.stockNuevo,
-          Motivo: m.motivo || "-",
-          Documento: m.documento || "-",
-        })),
+        rows: movements.map((m) => {
+  console.log("MOV:", m);
+
+  return {
+    Fecha: m.createdAt
+      ? new Date(m.createdAt).toLocaleDateString()
+      : "",
+    Producto: m.producto?.nombre || "N/D",
+    Tipo: m.tipo,
+    Cantidad: m.cantidad,
+    "Stock antes": m.stockAnterior,
+    "Stock despues": m.stockNuevo,
+    Motivo: m.motivo || "-",
+    Documento: m.documento ? m.documento : "-", // 👈 IMPORTANTE
+  };
+}),
       };
     }
 
