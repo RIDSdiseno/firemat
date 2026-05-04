@@ -533,13 +533,14 @@ const rowVariants = {
       >
         Editar
       </button>
-      <button
+      {/* RESERVAR */}
+      {/* <button
       type="button"
       onClick={() => reservarProducto(p.id)}
       className="px-2.5 py-1 rounded-md text-xs font-semibold bg-yellow-500 hover:bg-yellow-600 text-white"
       >
         Reservar
-        </button>
+        </button> */}
       <button
         type="button"
         onClick={() => handleDeleteClick(p.id)}
