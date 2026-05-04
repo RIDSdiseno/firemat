@@ -514,6 +514,7 @@ const getStockColor = (p) => {
   <span
   className={`px-2 py-1 rounded text-xs font-semibold ${getStockColor(p)}`}
 >
+  {p.stock}
   </span>
 </td>
 
