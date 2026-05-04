@@ -7,8 +7,8 @@ function SummaryCards({ productsCount, lowStockCount, totalStock, inactiveCount,
       value: productsCount,
       gradient: "from-red-500/20 to-red-500/10",
     },
-    {
-      label: "Items bajo minimo",
+    { //Items bajo minimo
+      label: "Stock Minimo",
       value: lowStockCount,
       gradient: "from-amber-500/20 to-amber-500/10",
     },
