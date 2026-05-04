@@ -351,6 +351,24 @@ const rowVariants = {
   hidden: { opacity: 0, y: 6 },
   visible: { opacity: 1, y: 0},
 };
+const getStockColor = (p) => {
+  if (p.criticidad === "Alta") {
+    if (p.stock <= p.minStock * 1.5) return "bg-red-100 text-red-700";
+    if (p.stock <= p.minStock * 2) return "bg-yellow-100 text-yellow-700";
+    return "bg-green-100 text-green-700";
+  }
+
+  if (p.criticidad === "Media") {
+    if (p.stock <= p.minStock) return "bg-red-100 text-red-700";
+    if (p.stock <= p.minStock * 1.5) return "bg-yellow-100 text-yellow-700";
+    return "bg-green-100 text-green-700";
+  }
+
+  // Baja
+  if (p.stock <= p.minStock * 0.5) return "bg-red-100 text-red-700";
+  if (p.stock <= p.minStock) return "bg-yellow-100 text-yellow-700";
+  return "bg-green-100 text-green-700";
+};
   return (
     <motion.section
       className="space-y-5"
@@ -494,15 +512,8 @@ const rowVariants = {
 <td className="px-3 py-2">{p.category}</td>
 <td className="px-3 py-2">
   <span
-    className={`px-2 py-1 rounded text-xs font-semibold ${
-      p.stock <= p.minStock
-        ? "bg-red-100 text-red-700"
-        : p.stock <= p.minStock * 1.5
-        ? "bg-yellow-100 text-yellow-700"
-        : "bg-green-100 text-green-700"
-    }`}
-  >
-    {p.stock}
+  className={`px-2 py-1 rounded text-xs font-semibold ${getStockColor(p)}`}
+>
   </span>
 </td>
 
