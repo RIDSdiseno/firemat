@@ -70,7 +70,7 @@ function MovimientosPage() {
     m.producto?.nombre ??
     `Producto ID ${m.productoId}`,
 
-  tipo: m.tipo,
+  tipo: m.tipo?.toLowerCase(),
   cantidad: m.cantidad,
 
   stockAnterior: m.stockAnterior ?? 0,
