@@ -390,8 +390,6 @@ function MovimientosPage() {
                 <option value="entrada">Entrada</option>
                 <option value="salida">Salida</option>
                 <option value="ajuste">Ajuste</option>
-                <option value="reserva">Reserva</option>
-                <option value="cancelacion">Cancelación</option>
               </select>
 
               <input
