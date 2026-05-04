@@ -112,96 +112,64 @@ function MovimientosPage() {
   e.preventDefault();
 
   try {
-    const productoId = Number(form.productoId);
-    const cantidad = Number(form.cantidad);
+  const productoId = Number(form.productoId);
+  const cantidad = Number(form.cantidad);
 
-    const producto = productos.find((p) => p.id === productoId);
+  const producto = productos.find((p) => p.id === productoId);
 
-    if (!producto) {
-      alert("Producto no encontrado");
+  if (!producto) {
+    alert("Producto no encontrado");
+    return;
+  }
+
+  let newStock = producto.stock;
+
+  // 🔥 LÓGICA SIMPLE Y CORRECTA
+  if (form.tipo === "entrada") {
+    newStock = producto.stock + cantidad;
+  } 
+  else if (form.tipo === "salida") {
+    if (cantidad > producto.stock) {
+      alert("Stock insuficiente");
       return;
     }
-
-    let newStock = producto.stock;
-
-    // 🔵 SISTEMA NUEVO (backend controla todo)
-    if (form.tipo === "reserva") {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/reservar`,
-        {
-          cantidad,
-          motivo: form.motivo,
-          documento: form.documento,
-        }
-      );
-    }
-
-    else if (form.tipo === "salida") {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/confirmar-salida`,
-        {
-          cantidad,
-          motivo: form.motivo,
-          documento: form.documento,
-        }
-      );
-    }
-
-    else if (form.tipo === "cancelacion") {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}/cancelar-reserva`,
-        {
-          cantidad,
-          motivo: form.motivo,
-          documento: form.documento,
-        }
-      );
-    }
-
-    // 🟡 SISTEMA VIEJO (entrada / ajuste)
-    else {
-      if (form.tipo === "entrada") {
-        newStock = producto.stock + cantidad;
-      } else if (form.tipo === "ajuste") {
-        newStock = cantidad;
-      }
-
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/movimientos`,
-        {
-          productoId,
-          tipo: form.tipo,
-          cantidad,
-          motivo: form.motivo,
-          documento: form.documento,
-        }
-      );
-
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/productos/${productoId}`,
-        {
-          stock: newStock,
-        }
-      );
-    }
-
-    setIsModalOpen(false);
-
-    setForm({
-      productoId: "",
-      tipo: "entrada",
-      cantidad: "",
-      motivo: "",
-      documento: "",
-    });
-
-    await obtenerMovimientos();
-    await obtenerProductos();
-
-  } catch (error) {
-    console.error(error);
-    alert("Error al crear movimiento");
+    newStock = producto.stock - cantidad;
+  } 
+  else if (form.tipo === "ajuste") {
+    newStock = cantidad;
   }
+
+  // 🔥 REGISTRAR MOVIMIENTO
+  await axios.post(`/api/movimientos`, {
+    productoId,
+    tipo: form.tipo,
+    cantidad,
+    motivo: form.motivo,
+    documento: form.documento,
+  });
+
+  // 🔥 ACTUALIZAR STOCK
+  await axios.put(`/api/productos/${productoId}`, {
+    stock: newStock,
+  });
+
+  setIsModalOpen(false);
+
+  setForm({
+    productoId: "",
+    tipo: "entrada",
+    cantidad: "",
+    motivo: "",
+    documento: "",
+  });
+
+  await obtenerMovimientos();
+  await obtenerProductos();
+
+} catch (error) {
+  console.error(error);
+  alert("Error al crear movimiento");
+}
 };
 
   const rowVariants = {
