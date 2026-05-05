@@ -46,7 +46,7 @@ function LowStockChart({ productos = [] }) {
   return (
     <div className="bg-white p-5 rounded-2xl shadow-md border border-neutral-200">
       <h3 className="text-sm font-semibold mb-4">
-        Productos críticos (bajo stock)
+        Productos (bajo stock)
       </h3>
 
       {data.length === 0 ? (
