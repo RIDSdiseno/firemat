@@ -17,11 +17,15 @@ function OportunidadesPage() {
     });
 
     const obtenerDatosFormulario = async () => {
+
         try {
             const [clientesRes, productosRes] = Promise.all([
                 axios.get("/api/clientes"),
                 axios.get("/api/productos")
             ]);
+
+            console.log(clientesRes.data);
+            console.log(productosRes.data);
 
             setClientes(clientesRes.data);
             setProductos(productosRes.data);
