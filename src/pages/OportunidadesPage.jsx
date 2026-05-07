@@ -19,7 +19,7 @@ function OportunidadesPage() {
     const obtenerDatosFormulario = async () => {
 
         try {
-            const [clientesRes, productosRes] = Promise.all([
+            const [clientesRes, productosRes] = await Promise.all([
                 axios.get("/api/clientes"),
                 axios.get("/api/productos")
             ]);
