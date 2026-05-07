@@ -16,6 +16,14 @@ function OportunidadesPage() {
         monto:"",
     });
 
+    const role = JSON.parse(
+        sessionStorage.getItem("users")
+    )?.role;
+
+    const canEdit =
+        role === "Dueno" ||
+        role === "Ejecutivo";
+
     const obtenerDatosFormulario = async () => {
 
         try {
@@ -134,7 +142,7 @@ function OportunidadesPage() {
         <h1 className="text-2xl font-bold mb-6">
             Oportunidades CRM
         </h1>
-
+        {canEdit && (
         <form
         onSubmit={crearOportunidad}
         className="bg-white p-4 rounded-xl shadow mb-6 space-y-4"
@@ -244,6 +252,7 @@ function OportunidadesPage() {
     </button>
 
     </form>
+)}
 
         <div className="space-y-4">
 
@@ -281,7 +290,8 @@ function OportunidadesPage() {
                     ${oportunidad.montoEstimado}
                 </p>
                 </div>
-
+                
+                {canEdit && (
                 <div className="flex gap-2">
 
                 <button
@@ -312,7 +322,7 @@ function OportunidadesPage() {
                 </button>
 
                 </div>
-
+                )}
             </div>
 
             </div>
