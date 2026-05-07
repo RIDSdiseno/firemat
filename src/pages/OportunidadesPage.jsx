@@ -132,6 +132,18 @@ function OportunidadesPage() {
         }
     };
 
+    const prospectos = oportunidades.filter(
+        (o) => o.etapa === "PROSPECTO"
+    );
+
+    const negociacion = oportunidades.filter(
+        (o) => o.etapa === "NEGOCIACION"
+    );
+
+    const ganadas = oportunidades.filter(
+        (o) => o.etapa === "GANADA"
+    );
+
     if (loading) {
     return <div>Cargando oportunidades...</div>;
     }
@@ -254,82 +266,145 @@ function OportunidadesPage() {
     </form>
 )}
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        {oportunidades.map((oportunidad) => (
+  {/* PROSPECTOS */}
+  <div className="bg-neutral-100 rounded-xl p-4">
+    <h2 className="font-bold mb-4 text-yellow-600">
+      Prospectos
+    </h2>
 
-            <div
-            key={oportunidad.id}
-            className="bg-white rounded-xl shadow p-4 border"
-            >
+    <div className="space-y-4">
+      {prospectos.map((oportunidad) => (
+        <div
+          key={oportunidad.id}
+          className="bg-white rounded-xl shadow p-4 border"
+        >
 
-            <div className="flex justify-between items-start">
+          <h3 className="font-semibold">
+            {oportunidad.titulo}
+          </h3>
 
-                <div>
-                    <h2 className="text-lg font-semibold">
-                    {oportunidad.titulo}
-                </h2>
+          <p className="text-sm text-neutral-600">
+            {oportunidad.cliente?.nombre}
+          </p>
 
-                <p className="text-sm text-neutral-600">
-                    Cliente: {oportunidad.cliente?.nombre}
-                </p>
+          <p className="text-sm">
+            ${oportunidad.montoEstimado}
+          </p>
 
-                <p className="text-sm text-neutral-600">
-                    Producto: {oportunidad.producto?.nombre || "Sin producto"}
-                </p>
+          {canEdit && (
+            <div className="flex gap-2 mt-3">
 
-                <p className="text-sm text-neutral-600">
-                    Etapa: {oportunidad.etapa}
-                </p>
-
-                <p className="text-sm text-neutral-600">
-                    Probabilidad: {oportunidad.probabilidad}%
-                </p>
-
-                <p className="text-sm font-semibold mt-2">
-                    ${oportunidad.montoEstimado}
-                </p>
-                </div>
-                
-                {canEdit && (
-                <div className="flex gap-2">
-
-                <button
-                    onClick={() =>
-                    cambiarEtapa(oportunidad.id, "NEGOCIACION")
-                    }
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-                >
-                    Negociación
-                </button>
-
-                <button
-                    onClick={() =>
-                    cambiarEtapa(oportunidad.id, "GANADA")
-                    }
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
-                >
-                    GANADA
-                </button>
-
-                <button
+              <button
                 onClick={() =>
-                    eliminarOportunidad(oportunidad.id)
+                  cambiarEtapa(
+                    oportunidad.id,
+                    "NEGOCIACION"
+                  )
+                }
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+              >
+                Negociación
+              </button>
+
+              <button
+                onClick={() =>
+                  eliminarOportunidad(
+                    oportunidad.id
+                  )
                 }
                 className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
-                >
-                    Eliminar
-                </button>
-
-                </div>
-                )}
-            </div>
+              >
+                Eliminar
+              </button>
 
             </div>
-
-        ))}
+          )}
 
         </div>
+      ))}
+    </div>
+  </div>
+
+  {/* NEGOCIACION */}
+  <div className="bg-neutral-100 rounded-xl p-4">
+
+    <h2 className="font-bold mb-4 text-blue-600">
+      Negociación
+    </h2>
+
+    <div className="space-y-4">
+      {negociacion.map((oportunidad) => (
+        <div
+          key={oportunidad.id}
+          className="bg-white rounded-xl shadow p-4 border"
+        >
+
+          <h3 className="font-semibold">
+            {oportunidad.titulo}
+          </h3>
+
+          <p className="text-sm text-neutral-600">
+            {oportunidad.cliente?.nombre}
+          </p>
+
+          <p className="text-sm">
+            ${oportunidad.montoEstimado}
+          </p>
+
+          {canEdit && (
+            <button
+              onClick={() =>
+                cambiarEtapa(
+                  oportunidad.id,
+                  "GANADA"
+                )
+              }
+              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded mt-3"
+            >
+              GANADA
+            </button>
+          )}
+
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* GANADAS */}
+  <div className="bg-neutral-100 rounded-xl p-4">
+
+    <h2 className="font-bold mb-4 text-green-600">
+      Ganadas
+    </h2>
+
+    <div className="space-y-4">
+      {ganadas.map((oportunidad) => (
+        <div
+          key={oportunidad.id}
+          className="bg-white rounded-xl shadow p-4 border"
+        >
+
+          <h3 className="font-semibold">
+            {oportunidad.titulo}
+          </h3>
+
+          <p className="text-sm text-neutral-600">
+            {oportunidad.cliente?.nombre}
+          </p>
+
+          <p className="text-sm">
+            ${oportunidad.montoEstimado}
+          </p>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+
+</div>
 
     </div>
     );
