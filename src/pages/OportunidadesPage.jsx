@@ -262,7 +262,7 @@ function OportunidadesPage() {
 
     <button
         type="submit"
-        className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded"
+        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
     >
         Crear Oportunidad
     </button>
@@ -270,7 +270,7 @@ function OportunidadesPage() {
     </form>
 )}
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
   {/* PROSPECTOS */}
   <div className="bg-neutral-100 rounded-xl p-4">
