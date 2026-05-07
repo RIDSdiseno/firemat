@@ -70,6 +70,29 @@ function OportunidadesPage() {
     }
     };
 
+    const eliminarOportunidad = async (id) => {
+
+  const confirmar = window.confirm(
+    "¿Eliminar oportunidad?"
+  );
+
+  if (!confirmar) return;
+
+  try {
+
+    await axios.delete(`/api/oportunidades/${id}`);
+
+    obtenerOportunidades();
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      error.response?.data?.message || "Error"
+    );
+  }
+};
+
     const crearOportunidad = async (e) => {
         e.preventDefault();
 
@@ -277,6 +300,15 @@ function OportunidadesPage() {
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
                 >
                     GANADA
+                </button>
+
+                <button
+                onClick={() =>
+                    eliminarOportunidad(oportunidad.id)
+                }
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                >
+                    Eliminar
                 </button>
 
                 </div>
