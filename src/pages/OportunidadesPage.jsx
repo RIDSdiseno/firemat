@@ -144,6 +144,10 @@ function OportunidadesPage() {
         (o) => o.etapa === "GANADA"
     );
 
+    const perdidas = oportunidades.filter(
+        (o) => o.etapa === "PERDIDA"
+    );
+
     if (loading) {
     return <div>Cargando oportunidades...</div>;
     }
@@ -266,7 +270,7 @@ function OportunidadesPage() {
     </form>
 )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
   {/* PROSPECTOS */}
   <div className="bg-neutral-100 rounded-xl p-4">
@@ -366,7 +370,17 @@ function OportunidadesPage() {
               GANADA
             </button>
           )}
-
+            <button
+            onClick={() =>
+                cambiarEtapa(
+                oportunidad.id,
+            "PERDIDA"
+        )
+        }
+            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded mt-2"
+            >
+                PERDIDA
+            </button>
         </div>
       ))}
     </div>
@@ -403,6 +417,38 @@ function OportunidadesPage() {
     </div>
 
   </div>
+
+  {/* PERDIDAS */}
+<div className="bg-neutral-100 rounded-xl p-4">
+
+  <h2 className="font-bold mb-4 text-red-600">
+    Perdidas
+  </h2>
+
+  <div className="space-y-4">
+    {perdidas.map((oportunidad) => (
+      <div
+        key={oportunidad.id}
+        className="bg-white rounded-xl shadow p-4 border"
+      >
+
+        <h3 className="font-semibold">
+          {oportunidad.titulo}
+        </h3>
+
+        <p className="text-sm text-neutral-600">
+          {oportunidad.cliente?.nombre}
+        </p>
+
+        <p className="text-sm">
+          ${oportunidad.montoEstimado}
+        </p>
+
+      </div>
+    ))}
+  </div>
+
+</div>
 
 </div>
 
