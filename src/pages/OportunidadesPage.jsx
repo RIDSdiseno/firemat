@@ -5,6 +5,30 @@ function OportunidadesPage() {
     
     const [oportunidades, setOportunidades] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [clientes, setClientes] = useState([]);
+    const [productos, setProductos] = useState([]);
+
+    const [form, setForm] = useState({
+        clienteId: "",
+        productoId: "",
+        titulo: "",
+        unidadNegocio: "",
+        monto:"",
+    });
+
+    const obtenerDatosFormulario = async () => {
+        try {
+            const [clientesRes, productosRes] = Promise.all([
+                axios.get("/api/clientes"),
+                axios.get("/api/productos")
+            ]);
+
+            setClientes(clientesRes.data);
+            setProductos(productosRes.data);
+        } catch (error){
+            console.error(error);
+        }
+    }
 
   // 🔥 cargar oportunidades
     const obtenerOportunidades = async () => {
@@ -22,6 +46,7 @@ function OportunidadesPage() {
     
     useEffect(() => {
         obtenerOportunidades();
+        obtenerDatosFormulario();
     }, []);
 
   // 🔥 cambiar etapa
@@ -41,6 +66,37 @@ function OportunidadesPage() {
     }
     };
 
+    const crearOportunidad = async (e) => {
+        e.preventDefault();
+
+        try {
+
+            await axios.post("/api/oportunidades", {
+                clienteId: Number(form.clienteId),
+                productoId: Number(form.productoId),
+                titulo: form.titulo,
+                unidadNegocio: form.unidadNegocio,
+                monto: Number(form.monto)
+            });
+
+            //limpiar
+            setForm({
+                clienteId: "",
+                productoId: "",
+                titulo: "",
+                unidadNegocio: "",
+                monto: "",
+            });
+
+            //recargar
+            obtenerOportunidades();
+
+        }   catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Error");
+        }
+    };
+
     if (loading) {
     return <div>Cargando oportunidades...</div>;
     }
@@ -51,6 +107,116 @@ function OportunidadesPage() {
         <h1 className="text-2xl font-bold mb-6">
             Oportunidades CRM
         </h1>
+
+        <form
+        onSubmit={crearOportunidad}
+        className="bg-white p-4 rounded-xl shadow mb-6 space-y-4"
+        >
+            
+            <h2 className="font-semibold text-lg">
+                Nueva Oportunidad
+            </h2>
+
+    <div className="grid grid-cols-2 gap-4">
+        
+        <select
+        value={form.clienteId}
+        onChange={(e) =>
+            setForm({
+            ...form,
+            clienteId: e.target.value
+        })
+        }
+        className="border p-2 rounded"
+        required
+        >
+        <option value="">Seleccione cliente</option>
+
+        {clientes.map((cliente) => (
+            <option
+            key={cliente.id}
+            value={cliente.id}
+            >
+            {cliente.nombre}
+            </option>
+        ))}
+        </select>
+
+        <select
+        value={form.productoId}
+        onChange={(e) =>
+            setForm({
+            ...form,
+            productoId: e.target.value
+        })
+        }
+        className="border p-2 rounded"
+        required
+        >
+        <option value="">Seleccione producto</option>
+
+        {productos.map((producto) => (
+        <option
+            key={producto.id}
+            value={producto.id}
+        >
+            {producto.nombre}
+        </option>
+        ))}
+        </select>
+
+        <input
+        type="text"
+        placeholder="Título"
+        value={form.titulo}
+        onChange={(e) =>
+            setForm({
+            ...form,
+            titulo: e.target.value
+        })
+        }
+        className="border p-2 rounded"
+        required
+        />
+
+        <input
+        type="text"
+        placeholder="Unidad de negocio"
+        value={form.unidadNegocio}
+        onChange={(e) =>
+            setForm({
+            ...form,
+            unidadNegocio: e.target.value
+        })
+        }
+        className="border p-2 rounded"
+        required
+        />
+
+    <input
+        type="number"
+        placeholder="Monto"
+        value={form.monto}
+        onChange={(e) =>
+            setForm({
+            ...form,
+            monto: e.target.value
+        })
+        }
+        className="border p-2 rounded"
+        required
+    />
+
+    </div>
+
+    <button
+        type="submit"
+        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+    >
+        Crear Oportunidad
+    </button>
+
+    </form>
 
         <div className="space-y-4">
 
