@@ -197,6 +197,10 @@ useEffect(() => {
   const role = currentUser?.role || "Dueno";
   const canManageRoles = role === "Dueno";
   const canManageCategories = role === "Dueno" || role === "Ejecutivo";
+  const canViewOportunidades =
+  role === "Dueno" ||
+  role === "Ejecutivo" ||
+  role === "Gerente";
 
   // ⏳ Loading
   if (loading) {
@@ -251,9 +255,25 @@ useEffect(() => {
                     ? "bg-red-600 text-white"
                     : "text-neutral-200 hover:bg-neutral-800"
                 }`
-              }>
+              }
+              >
                 Productos
               </NavLink>
+
+              {canViewOportunidades && (
+              <NavLink
+                to="/oportunidades"
+                className={({ isActive }) =>
+                `px-3 py-1.5 rounded-md ${
+                isActive
+                ? "bg-red-600 text-white"
+                : "text-neutral-200 hover:bg-neutral-800"
+                }`
+              }
+              >
+                Oportunidades
+              </NavLink>
+              )}
 
               <NavLink to="/oportunidades" className={({ isActive }) =>
               `px-3 py-1.5 rounded-md ${
@@ -334,8 +354,12 @@ useEffect(() => {
 
               <Route
               path="/oportunidades"
-              element={<OportunidadesPage />}
-              />
+              element={
+                canViewOportunidades
+                ? <OportunidadesPage />
+                : <NotFoundPage />
+                }
+                />
 
               <Route path="/categorias" element={
                 canManageCategories
