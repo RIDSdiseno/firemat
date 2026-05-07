@@ -22,6 +22,7 @@ import RolesPage from "./pages/RolesPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProductoDetallePage from "./pages/ProductoDetallePage";
+import OportunidadesPage from "./pages/OportunidadesPage";
 
 import {
   INITIAL_PRODUCTS,
@@ -254,6 +255,16 @@ useEffect(() => {
                 Productos
               </NavLink>
 
+              <NavLink to="/oportunidades" className={({ isActive }) =>
+              `px-3 py-1.5 rounded-md ${
+                isActive
+                ? "bg-red-600 text-white"
+                : "text-neutral-200 hover:bg-neutral-800"
+              }`
+              }>
+                Oportunidades
+                </NavLink>
+
               {canManageCategories && (
                 <NavLink to="/categorias" className={({ isActive }) =>
                   `px-3 py-1.5 rounded-md ${
@@ -320,6 +331,11 @@ useEffect(() => {
               } />
 
               <Route path="/productos/:id" element={<ProductoDetallePage />} />
+
+              <Route
+              path="/oportunidades"
+              element={<OportunidadesPage />}
+              />
 
               <Route path="/categorias" element={
                 canManageCategories
