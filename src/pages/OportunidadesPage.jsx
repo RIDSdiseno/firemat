@@ -17,7 +17,7 @@ function OportunidadesPage() {
     });
 
     const role = JSON.parse(
-        sessionStorage.getItem("users")
+        sessionStorage.getItem("user")
     )?.role;
 
     const canEdit =
