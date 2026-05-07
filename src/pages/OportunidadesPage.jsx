@@ -290,7 +290,7 @@ function OportunidadesPage() {
           </p>
 
           <p className="text-sm">
-            ${oportunidad.montoEstimado}
+            ${oportunidad.montoEstimado.toLocaleString()}
           </p>
 
           {canEdit && (
