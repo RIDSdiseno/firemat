@@ -140,12 +140,10 @@ function OportunidadesPage() {
         (o) => o.etapa === "NEGOCIACION"
     );
 
-    const ganadas = oportunidades.filter(
-        (o) => o.etapa === "GANADA"
-    );
-
-    const perdidas = oportunidades.filter(
-        (o) => o.etapa === "PERDIDA"
+    const resultados = oportunidades.filter(
+    (o) =>
+        o.etapa === "GANADA" ||
+        o.etapa === "PERDIDA"
     );
 
     if (loading) {
@@ -270,7 +268,7 @@ function OportunidadesPage() {
     </form>
 )}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
   {/* PROSPECTOS */}
   <div className="bg-neutral-100 rounded-xl p-4">
@@ -386,15 +384,15 @@ function OportunidadesPage() {
     </div>
   </div>
 
-  {/* GANADAS */}
+  {/* RESULTADOS */}
   <div className="bg-neutral-100 rounded-xl p-4">
 
     <h2 className="font-bold mb-4 text-green-600">
-      Ganadas
+      Resultados
     </h2>
 
     <div className="space-y-4">
-      {ganadas.map((oportunidad) => (
+      {resultados.map((oportunidad) => (
         <div
           key={oportunidad.id}
           className="bg-white rounded-xl shadow p-4 border"
@@ -412,43 +410,24 @@ function OportunidadesPage() {
             ${oportunidad.montoEstimado}
           </p>
 
+          <p
+          className={`text-sm font-semibold mt-2 ${
+            oportunidad.etapa === "GANADA"
+            ? "text-green-600"
+            : "text-red-600"
+            }`}
+            >
+            {oportunidad.etapa === "GANADA"
+            ? "✅ GANADA"
+            : "❌ PERDIDA"}
+        </p>
+
         </div>
       ))}
     </div>
 
   </div>
 
-  {/* PERDIDAS */}
-<div className="bg-neutral-100 rounded-xl p-4">
-
-  <h2 className="font-bold mb-4 text-red-600">
-    Perdidas
-  </h2>
-
-  <div className="space-y-4">
-    {perdidas.map((oportunidad) => (
-      <div
-        key={oportunidad.id}
-        className="bg-white rounded-xl shadow p-4 border"
-      >
-
-        <h3 className="font-semibold">
-          {oportunidad.titulo}
-        </h3>
-
-        <p className="text-sm text-neutral-600">
-          {oportunidad.cliente?.nombre}
-        </p>
-
-        <p className="text-sm">
-          ${oportunidad.montoEstimado}
-        </p>
-
-      </div>
-    ))}
-  </div>
-
-</div>
 
 </div>
 
