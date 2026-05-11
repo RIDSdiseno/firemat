@@ -22,7 +22,6 @@ import RolesPage from "./pages/RolesPage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProductoDetallePage from "./pages/ProductoDetallePage";
-import OportunidadesPage from "./pages/OportunidadesPage";
 
 import {
   INITIAL_PRODUCTS,
@@ -197,10 +196,6 @@ useEffect(() => {
   const role = currentUser?.role || "Dueno";
   const canManageRoles = role === "Dueno";
   const canManageCategories = role === "Dueno" || role === "Ejecutivo";
-  const canViewOportunidades =
-  role === "Dueno" ||
-  role === "Ejecutivo" ||
-  role === "Gerente";
 
   // ⏳ Loading
   if (loading) {
@@ -259,21 +254,6 @@ useEffect(() => {
               >
                 Productos
               </NavLink>
-
-              {canViewOportunidades && (
-              <NavLink
-                to="/oportunidades"
-                className={({ isActive }) =>
-                `px-3 py-1.5 rounded-md ${
-                isActive
-                ? "bg-red-600 text-white"
-                : "text-neutral-200 hover:bg-neutral-800"
-                }`
-              }
-              >
-                Oportunidades
-              </NavLink>
-              )}
 
               {canManageCategories && (
                 <NavLink to="/categorias" className={({ isActive }) =>
@@ -341,15 +321,6 @@ useEffect(() => {
               } />
 
               <Route path="/productos/:id" element={<ProductoDetallePage />} />
-
-              <Route
-              path="/oportunidades"
-              element={
-                canViewOportunidades
-                ? <OportunidadesPage />
-                : <NotFoundPage />
-                }
-                />
 
               <Route path="/categorias" element={
                 canManageCategories
