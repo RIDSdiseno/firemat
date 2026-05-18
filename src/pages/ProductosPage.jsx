@@ -59,7 +59,6 @@ function ProductosPage({
       status: p.activo ? "Activo" : "Inactivo",
       docRef: typeof p.descripcion === "string" ? p.descripcion : "",
       imageUrl: typeof p.imagen === "string" ? p.imagen : "",
-      criticidad: p.criticidad || "Media",
     }));
     
     setProducts(data);
@@ -90,7 +89,6 @@ function ProductosPage({
     activo: true,
     docRef: "",
     imageUrl: "",
-    criticidad: "Media",
   });
   const [imagePreview, setImagePreview] = useState("");
 
@@ -110,7 +108,6 @@ function ProductosPage({
       activo: true,
       docRef: "",
       imageUrl: "",
-      criticidad: "Media",
     });
     setEditingId(null);
     setImagePreview("");
@@ -217,7 +214,6 @@ if (!categoriaObj) {
       ubicacion: form.location.trim() || null,
       activo: form.status !== undefined ? form.status === "Activo" : form.activo ?? true,
       imagen: form.imageUrl,
-      criticidad: form.criticidad || "Media",
       sku: form.sku.trim() || null,
       codigoQR: form.codigoQR.trim() || null,
     };
@@ -293,7 +289,6 @@ if (!categoriaObj) {
       status: product.status,
       docRef: product.docRef || "",
       imageUrl: product.imageUrl || "",
-      criticidad: product.criticidad || "Media",
     });
     setImagePreview(product.imageUrl || "");
     setIsModalOpen(true);
@@ -363,21 +358,8 @@ const rowVariants = {
   visible: { opacity: 1, y: 0},
 };
 const getStockColor = (p) => {
-  if (p.criticidad === "Alta") {
-    if (p.stock <= p.minStock * 1.5) return "bg-red-100 text-red-700";
-    if (p.stock <= p.minStock * 2) return "bg-yellow-100 text-yellow-700";
-    return "bg-green-100 text-green-700";
-  }
-
-  if (p.criticidad === "Media") {
-    if (p.stock <= p.minStock) return "bg-red-100 text-red-700";
-    if (p.stock <= p.minStock * 1.5) return "bg-yellow-100 text-yellow-700";
-    return "bg-green-100 text-green-700";
-  }
-
-  // Baja
-  if (p.stock <= p.minStock * 0.5) return "bg-red-100 text-red-700";
-  if (p.stock <= p.minStock) return "bg-yellow-100 text-yellow-700";
+  if (p.stock <= p.minStock) return "bg-red-100 text-red-700";
+  if (p.stock <= p.minStock * 1.5) return "bg-yellow-100 text-yellow-700";
   return "bg-green-100 text-green-700";
 };
   return (
@@ -467,7 +449,6 @@ const getStockColor = (p) => {
                 <th className="text-left px-3 py-2">Minimo</th>
                 <th className="text-left px-3 py-2">Ubicacion</th>
                 <th className="text-left px-3 py-2">Estado</th>
-                <th className="text-left px-3 py-2">Criticidad</th>
                 <th className="text-left px-3 py-2">Doc. ref.</th>
                 <th className="text-left px-3 py-2">Acciones</th>
                 
@@ -532,22 +513,6 @@ const getStockColor = (p) => {
 <td className="px-3 py-2">{p.minStock}</td>
 <td className="px-3 py-2">{p.location}</td>
 <td className="px-3 py-2">{p.status}</td>
-
-{/* 🔥 CRITICIDAD (única y con estilo) */}
-<td className="px-3 py-2">
-  <span
-    className={`px-2 py-1 rounded text-xs font-semibold ${
-      p.criticidad === "Alta"
-        ? "bg-red-100 text-red-700"
-        : p.criticidad === "Media"
-        ? "bg-yellow-100 text-yellow-700"
-        : "bg-green-100 text-green-700"
-    }`}
-  >
-    {p.criticidad || "Media"}
-  </span>
-</td>
-
 
 {/* 🔥 DOCUMENTO */}
 <td className="px-3 py-2">
@@ -728,20 +693,6 @@ const getStockColor = (p) => {
                   <option value="Inactivo">Inactivo</option>
                 </select>
               </label>
-
-              <label className="flex flex-col gap-1">
-                Criticidad
-                <select
-                name="criticidad"
-                value={form.criticidad}
-                onChange={handleChange}
-                className="px-3 py-2 rounded-md border border-neutral-400 bg-neutral-800 text-white text-sm"
-                >
-                  <option value="Alta">Alta</option>
-                  <option value="Media">Media</option>
-                  <option value="Baja">Baja</option>
-                  </select>
-                </label>
 
               <label className="flex flex-col gap-1">
                 Documento de referencia

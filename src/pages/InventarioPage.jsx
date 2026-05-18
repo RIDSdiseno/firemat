@@ -42,7 +42,8 @@ function InventarioPage({
         ...p,
         name: p.nombre,
         category: p.categoria,
-        sku: p.id,
+        sku: p.sku || "",
+        codigoQR: p.codigoQR || "",
         code: `P-${p.id}`,
         status: p.activo ? "Activo" : "Inactivo",
       }));
@@ -148,7 +149,7 @@ function InventarioPage({
     }
   };
 
-  const handleEditProductFromTable = (productId) => {
+const handleEditProductFromTable = (productId) => {
     if (!canEditProduct) {
       showAlert("No tienes permisos.", "Permisos");
       return;
@@ -179,7 +180,7 @@ function InventarioPage({
 
   return (
     <>
-      <SummaryCards
+<SummaryCards
         productsCount={totalProductosActivos}
         lowStockCount={lowStockCount}
         totalStock={totalStock}

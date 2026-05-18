@@ -51,21 +51,6 @@ function ProductoDetallePage() {
             <p><strong>Stock:</strong> {producto.stock}</p>
             <p><strong>Mínimo:</strong> {producto.minStock}</p>
             <p><strong>Ubicación:</strong> {producto.ubicacion || "-"}</p>
-
-            <p>
-            <strong>Criticidad:</strong>{" "}
-            <span
-                className={`font-semibold ${
-                producto.criticidad === "Alta"
-                    ? "text-red-600"
-                    : producto.criticidad === "Media"
-                    ? "text-yellow-600"
-                    : "text-green-600"
-                }`}
-            >
-                {producto.criticidad}
-            </span>
-            </p>
         </div>
         </div>
 

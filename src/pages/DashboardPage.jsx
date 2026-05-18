@@ -71,16 +71,6 @@ function DashboardPage() {
     (p) => p.stock <= p.minStock
     ).length;
 
-    const productosCriticos = productosActivos.filter(
-        (p) => p.criticidad == "Alta" 
-    ).length;
-
-    const criticidadStats = {
-        alta: productosActivos.filter(p => p.criticidad === "Alta").length,
-        media: productosActivos.filter(p => p.criticidad === "Media").length,
-        baja: productosActivos.filter(p => p.criticidad === "Baja").length,
-    };
-
   // 🔥 ORDEN SEGURO
     const movimientosOrdenados = [...movimientos].sort(
     (a, b) =>
@@ -108,9 +98,7 @@ function DashboardPage() {
 
         {productos.length > 0 && (
     <p className="text-xs mt-2 text-neutral-600">
-    {productosCriticos > 0
-        ? "⚠️ Existen productos críticos que requieren atención inmediata."
-        : bajoStock > 0
+    {bajoStock > 0
         ? "Hay productos con bajo stock."
         : "Inventario en estado óptimo."}
     </p>
@@ -159,14 +147,6 @@ function DashboardPage() {
         </div>
 
         <div className="bg-white p-4 rounded-xl shadow">
-            <p className="text-xs text-gray-500">Críticos</p>
-            <h3 className="text-xl font-bold text-red-600">
-            {productosCriticos}
-            </h3>
-        </div>
-
-        {/* 🔥 NUEVO KPI */}
-        <div className="bg-white p-4 rounded-xl shadow">
             <p className="text-xs text-gray-500">Inactivos</p>
             <h3 className="text-xl font-bold text-gray-500">
             {productosInactivos}
@@ -184,27 +164,6 @@ function DashboardPage() {
             </h3>
         </div>
         </div>
-
-        {/* Criticidad */}
-        <div className="bg-white p-4 rounded-xl shadow">
-    <p className="text-xs text-gray-500 mb-2">
-    Distribución por criticidad
-    </p>
-
-    <div className="flex gap-4 text-sm">
-    <span className="text-red-600 font-semibold">
-        Alta: {criticidadStats.alta}
-    </span>
-
-    <span className="text-yellow-600 font-semibold">
-        Media: {criticidadStats.media}
-    </span>
-
-    <span className="text-green-600 font-semibold">
-        Baja: {criticidadStats.baja}
-    </span>
-    </div>
-</div>
 
         {/* 📊 gráficos */}
         <div className="grid md:grid-cols-2 gap-4">
