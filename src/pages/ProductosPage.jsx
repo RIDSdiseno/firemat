@@ -187,14 +187,6 @@ if (!categoriaObj) {
 
   const docRefClean = String(form.docRef || "").trim();
 
-  if (!docRefClean) {
-    showAlert(
-      "El documento de referencia es obligatorio.",
-      "Datos incompletos"
-    );
-    return;
-  }
-
   // ✅ FIX DEFINITIVO: SIEMPRE enviar número (o 0)
   const stock = Number(form.stock);
   if (isNaN(stock)) {
@@ -206,7 +198,7 @@ if (!categoriaObj) {
   try {
     const payload = {
       nombre: form.name.trim(),
-      descripcion: docRefClean,
+      descripcion: docRefClean || null,
       categoriaId: categoriaObj.id,
       stock: stock,
       minStock: Number(form.minStock || 0),
