@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import  axios  from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
+import { QRCodeSVG } from "qrcode.react";
 
 function ProductosPage({
   products,
@@ -48,7 +49,8 @@ function ProductosPage({
     const data = rawData.map((p) => ({
       id: p.id,
       code: p.id,
-      sku: "",
+      sku: p.sku || "",
+      codigoQR: p.codigoQR || "",
       name: typeof p.nombre === "string" ? p.nombre : "",
       category: categories.find(c => Number(c.id) === Number(p.categoriaId))?.nombre || "Sin categoría",
       stock: Number(p.stock) || 0,
@@ -79,6 +81,7 @@ function ProductosPage({
   const [form, setForm] = useState({
     code: "",
     sku: "",
+    codigoQR: "",
     name: "",
     category: categories[0]?.nombre ?? "",
     stock: "",
@@ -98,6 +101,7 @@ function ProductosPage({
     setForm({
       code: "",
       sku: "",
+      codigoQR: "",
       name: "",
       category: categories[0]?.nombre ?? "",
       stock: "",
@@ -131,7 +135,11 @@ function ProductosPage({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "sku" ? { codigoQR: value.trim() } : {}),
+    }));
 
     if (name === "imageUrl") {
       setImagePreview(value);
@@ -207,9 +215,11 @@ if (!categoriaObj) {
       minStock: Number(form.minStock || 0),
       precio: 0,
       ubicacion: form.location.trim() || null,
-      activo: form.status === "Activo",
-      imagen: form.imageUrl, // 
+      activo: form.status !== undefined ? form.status === "Activo" : form.activo ?? true,
+      imagen: form.imageUrl,
       criticidad: form.criticidad || "Media",
+      sku: form.sku.trim() || null,
+      codigoQR: form.codigoQR.trim() || null,
     };
 
     console.log("PAYLOAD ENVIADO:", payload)
@@ -274,6 +284,7 @@ if (!categoriaObj) {
     setForm({
       code: product.code,
       sku: product.sku || "",
+      codigoQR: product.codigoQR || product.sku || "",
       name: product.name,
       category: product.category,
       stock: String(product.stock),
@@ -806,6 +817,16 @@ const getStockColor = (p) => {
                   </p>
                 )}
               </div>
+
+              {form.codigoQR && (
+                <div className="sm:col-span-2 lg:col-span-3 flex flex-col gap-1">
+                  <span className="text-xs text-neutral-400">QR generado (basado en SKU)</span>
+                  <div className="flex items-center gap-3">
+                    <QRCodeSVG value={form.codigoQR} size={80} />
+                    <span className="text-xs text-neutral-500 font-mono">{form.codigoQR}</span>
+                  </div>
+                </div>
+              )}
 
               <div className="sm:col-span-2 lg:col-span-3 flex justify-end gap-2 mt-2">
                 <button
