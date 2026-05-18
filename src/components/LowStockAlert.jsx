@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import axios from "../api/axios";
 
 function LowStockAlert({ items = [], onNotify }) {
   const [emailTo, setEmailTo] = useState("compras@firemat.cl");
@@ -27,9 +28,11 @@ function LowStockAlert({ items = [], onNotify }) {
 
   const hasLowStock = items.length > 0;
 
-  const handleSend = () => {
+  const [sending, setSending] = useState(false);
+
+  const handleSend = async () => {
     if (!hasLowStock) {
-      onNotify?.(false, "No hay productos bajo minimo para notificar.");
+      onNotify?.(false, "No hay productos bajo mínimo para notificar.");
       return;
     }
 
@@ -38,14 +41,19 @@ function LowStockAlert({ items = [], onNotify }) {
       return;
     }
 
-    const mailto = `mailto:${encodeURIComponent(
-      emailTo.trim()
-    )}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-      bodyPreview
-    )}`;
-
-    window.location.href = mailto;
-    onNotify?.(true, "Abrimos tu cliente de correo con el resumen listo.");
+    setSending(true);
+    try {
+      await axios.post("/api/alertas/stock-bajo", {
+        destinatario: emailTo.trim(),
+        asunto: subject,
+        productos: items,
+      });
+      onNotify?.(true, "Correo enviado correctamente.");
+    } catch (err) {
+      onNotify?.(false, "Error al enviar el correo. Intenta nuevamente.");
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleCopy = async () => {
@@ -119,21 +127,22 @@ function LowStockAlert({ items = [], onNotify }) {
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-2 rounded-md text-xs font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-100"
+              disabled={sending}
+              className="px-3 py-2 rounded-md text-xs font-semibold border border-neutral-300 text-neutral-700 hover:bg-neutral-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Copiar texto
             </button>
             <button
               type="button"
               onClick={handleSend}
-              disabled={!hasLowStock}
+              disabled={!hasLowStock || sending}
               className={`px-4 py-2 rounded-md text-xs font-semibold shadow ${
-                hasLowStock
+                hasLowStock && !sending
                   ? "bg-red-600 text-white hover:bg-red-700"
                   : "bg-neutral-300 text-neutral-600 cursor-not-allowed"
               }`}
             >
-              Enviar correo
+              {sending ? "Enviando..." : "Enviar correo"}
             </button>
           </div>
         </div>
